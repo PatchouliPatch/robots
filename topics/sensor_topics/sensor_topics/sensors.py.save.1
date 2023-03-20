@@ -23,15 +23,8 @@ class SensorsSubscriber(Node):
 		self.imu_count = 0
 
 	def imu_callback(self, msg):
-
-		abt_x = msg.orientation.x
-		abt_y = msg.orientation.y
-		abt_z = msg.orientation.z
-
-		av_x, av_y, av_z = msg.angular_velocity.x, msg.angular_velocity.y, msg.angular_velocity.z
-		la_x, la_y, la_z = msg.linear_acceleration.x, msg.angular_velocity.y, msg.angular_velocity.z
 		
-		print(f'[{time.time()}] [Imu]: Orient ({abt_x},{abt_y},{abt_z}) | AV: ({av_x},{av_y},{av_z}) | LA: ({la_x},{la_y},{la_z})')
+		print(f'[{time.time()}] [Imu]: Orient {msg.orientation_covariance} | AV: {msg.angular_velocity} | LA: {msg.linear_acceleration}')
 		time.sleep(1)
 		# self.get_logger().info(f"Orientation: {msg.orientation_covariance}| AV: {msg.angular_velocity} | LAccel: {msg.linear_acceleration}")
 

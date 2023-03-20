@@ -1,0 +1,60 @@
+import rclpy
+import time
+import datetime
+import numpy as np
+
+from rclpy.node import Node
+from sensor_msgs.msg import Imu, BatteryState
+from sensor_msgs.msg import LaserScan
+from rclpy.qos import qos_profile_sensor_data
+
+class SensorsSubscriber(Node):
+	def __init__(self):
+		super().__init__('sensors_subscriber')
+		
+		self.set_params()
+		self.get_params()
+		self.scan_rangers = []
+		self.init_scan_state = False
+
+		self.timer = self.create_timer(self.timer_period, self.timer_calleback)
+
+		# subscription format: create_subscription(NameOfCallback, 'topic_name', self.listener_callback, qos_profile)
+		self.create_subscription(Imu, 'imu', self.imu_callback, qos_profile_sensor_data)
+		self.create_subscription(BatteryState, 'battery_state', self.battery_callback, qos_profile=qos_profile_sensor_data)
+		self.create_subscription(LaserScan, 'scan', self.scan_callback, qos_profile=qos_profile_sensor_data)
+		self.imu_count = 0
+
+	def imu_callback(self, msg):
+		self.get_logger().info(f"IMU DATA: {msg.data}")
+
+	def scan_callback(self, msg):
+		self.get_logger().info(f"SCANNER DATA: {msg.data}")
+	
+	def battery_callback(self, msg):
+		self.get_logger().info(f"BATTERY DATA: {msg.data}")
+
+def main(args=None):
+
+	rclpy.init(args=args)
+
+	# Imu subscriber
+	sensor_subscriber = SensorSubsciber()
+	rclpy.spin(sensor_subscriber)
+	sensor_subscriber.destroy_node()
+	rclpy.shutdown(
+	# Scanner subscriber
+	scanner_subscriber = LaserScan()
+	rclpy.spin(scanner_subscriber)
+	scanner_subscriber.destroy_node()
+
+	# Battery subscriber
+	battery_subscriber = BatteryState()
+	rlcpy.spin(battery_subscriber)
+	battery_subscriber.destroy_node()
+	rclpy.shutdown()
+
+
+if __name__ == '__main__':
+
+	main()
