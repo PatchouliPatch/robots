@@ -46,12 +46,11 @@ class ImagePublisher(Node):
 
 		result, image = self.camera.read()
 		if result:
-			image = image.astype(np.uint8) # change to uint8
 			self.get_logger().info(f"[CAMERA ACTIVE]", throttle_duration_sec=5) # stop printing every 5 seconds
 			msg = self.br.cv2_to_compressed_imgmsg(image)
 			msg.header.stamp = self.get_clock().now().to_msg()
 			if self.enable_view:
-				cv2.imshow("CAMERA",image)
+				cv2.imshow("CAMERA",image) # broken, for some reason
 			self.publisher.publish(msg)
 
 def main(args=None):
