@@ -21,7 +21,9 @@ setup(
     entry_points={
         'console_scripts': [
 		'sensors = sensor_topics.sensors:main',
-		'periodic = sensor_topics.periodic:main'
+		'periodic = sensor_topics.periodic:main',
+		'image_publisher = sensor_topics.image_publisher:main',
+		'image_subscriber = sensor_topics.image_subscriber:main'
         ],
     },
 )
